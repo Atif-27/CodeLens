@@ -11,4 +11,14 @@ datasource db {
 }
 
 model User {
+    id        String    @id @default(uuid())
+    createdAt DateTime  @default(now())
+    updatedAt DateTime?
+
+    imageUrl  String?
+    firstName String?
+    lastName  String?
+
+    emailAddress String @unique
+    credit       Int    @default(2000)
 }
