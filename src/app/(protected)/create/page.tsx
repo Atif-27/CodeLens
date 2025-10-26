@@ -9,6 +9,7 @@ import { api } from "@/trpc/react";
 import { Info } from "lucide-react";
 import { redirect } from "next/navigation";
 import Image from "next/image";
+import { error } from "console";
 
 type IFormInput = {
   repoUrl: string;
@@ -18,7 +19,7 @@ type IFormInput = {
 
 const Create = () => {
   const { register, handleSubmit, reset } = useForm<IFormInput>();
-  //   const createProject = api.project.createProject.useMutation();
+  const createProject = api.project.createProject.useMutation();
   //   const checkCredits = api.project.checkCredits.useMutation();
   //   const refetch = useRefetch();
 
@@ -27,19 +28,18 @@ const Create = () => {
     console.log(projectName, repoUrl, gitHubToken);
 
     // if (!!checkCredits.data) {
-    //   createProject.mutate(
-    //     { name: projectName, repoUrl, gitHubToken },
-    //     {
-    //       onSuccess: () => {
-    //         toast.success("Project created successfully");
-    //         redirect("/dashboard");
-    //       },
-    //       onError: (error) => {
-    //         console.log("error");
-    //         toast.error("Failed to create project");
-    //       },
-    //     },
-    //   );
+    createProject.mutate(
+      { name: projectName, repoUrl: repoUrl, gitHubToken: gitHubToken },
+      {
+        onSuccess: () => {
+          toast.success("Project created successfully");
+        },
+        onError: (error) => {
+          console.log(error);
+          toast.error("Failed to create project");
+        },
+      },
+    );
     // } else {
     //   checkCredits.mutate({
     //     githubUrl: repoUrl,
