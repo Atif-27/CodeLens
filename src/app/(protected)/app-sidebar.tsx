@@ -24,13 +24,13 @@ import {
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-// import useProject from "@/hooks/use-project";
+import useProject from "@/hooks/use-project";
 
 export function AppSidebar() {
   const router = useRouter();
   const pathname = usePathname();
   const { open } = useSidebar();
-  //   const { projects, projectId, setProjectId } = useProject();
+  const { projects, projectId, setProjectId } = useProject();
   const items = [
     {
       title: "Dashboard",
@@ -100,9 +100,9 @@ export function AppSidebar() {
           <SidebarGroupLabel>Your Projects</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {/* {projects?.map((project) => {
+              {projects?.map((project) => {
                 return (
-                  <SidebarMenuItem key={project.name}>
+                  <SidebarMenuItem key={project.id}>
                     <SidebarMenuButton asChild>
                       <div
                         onClick={() => {
@@ -130,7 +130,7 @@ export function AppSidebar() {
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 );
-              })} */}
+              })}
               <div className="h-2"></div>
               {open && (
                 <SidebarMenuItem>

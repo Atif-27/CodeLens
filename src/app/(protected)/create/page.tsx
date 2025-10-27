@@ -5,11 +5,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { api } from "@/trpc/react";
-// import useRefetch from "@/hooks/use-refetch";
-import { Info } from "lucide-react";
-import { redirect } from "next/navigation";
-import Image from "next/image";
-import { error } from "console";
+import useRefetch from "@/hooks/use-refetch";
 
 type IFormInput = {
   repoUrl: string;
@@ -21,7 +17,7 @@ const Create = () => {
   const { register, handleSubmit, reset } = useForm<IFormInput>();
   const createProject = api.project.createProject.useMutation();
   //   const checkCredits = api.project.checkCredits.useMutation();
-  //   const refetch = useRefetch();
+  const refetch = useRefetch();
 
   function onSubmitFn(data: IFormInput) {
     const { projectName, repoUrl, gitHubToken } = data;
@@ -33,6 +29,8 @@ const Create = () => {
       {
         onSuccess: () => {
           toast.success("Project created successfully");
+          void refetch();
+          reset();
         },
         onError: (error) => {
           console.log(error);
