@@ -26,11 +26,11 @@ const Page = () => {
               <p className="text-sm font-medium text-white">
                 This project is linked to{" "}
                 <Link
-                  href={project?.repoUrl ?? ""}
+                  href={project?.githubUrl ?? ""}
                   target="_blank"
                   className="inline-flex items-center text-white/80 hover:underline"
                 >
-                  {project?.repoUrl}
+                  {project?.githubUrl}
                   <ExternalLink className="ml-1 size-4" />
                 </Link>
               </p>
