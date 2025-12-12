@@ -1,6 +1,7 @@
 import z from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { pollCommits } from "@/lib/github";
+import ingestRepo from "@/lib/kafka";
 
 export const projectRouter = createTRPCRouter({
     createProject: protectedProcedure
@@ -12,7 +13,7 @@ export const projectRouter = createTRPCRouter({
             })
         )
         .mutation(async ({ ctx, input }) => {
-            const { name, repoUrl } = input;
+            const { name, repoUrl, gitHubToken = process.env.GITHUB_ACCESS_TOKEN } = input;
             console.log(input);
             const project = await ctx.db.project.create({
                 data: {
@@ -25,8 +26,10 @@ export const projectRouter = createTRPCRouter({
                     }
                 },
             });
+            const repo = /github\.com\/([^/]+\/[^/]+)/.exec(repoUrl)?.[1];
 
             await pollCommits(project.id);
+            await ingestRepo(repo!, gitHubToken!);
             return project;
         }),
 
@@ -45,9 +48,7 @@ export const projectRouter = createTRPCRouter({
     }),
 
 
-    getCommits: protectedProcedure.input(z.object({
-        projectId: z.string(),
-    })).query(async ({ ctx, input }) => {
+    getCommits: protectedProcedure.input(z.object({ projectId: z.string() })).query(async ({ ctx, input }) => {
         const { projectId } = input;
 
         console.log(`polling commits for project ${projectId}`);

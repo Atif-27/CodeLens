@@ -107,9 +107,9 @@ export function AppSidebar() {
                       <div
                         onClick={() => {
                           setProjectId(project.id);
-                          if (pathname !== "/dashboard") {
-                            router.push("/dashboard");
-                          }
+                          // if (pathname !== "/dashboard" && pathname !== "/qa") {
+                          //   router.push("/dashboard");
+                          // }
                         }}
                         className={cn("cursor-pointer", {
                           "bg-primary/20": project.id === projectId,

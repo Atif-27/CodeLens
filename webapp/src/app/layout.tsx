@@ -22,8 +22,8 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <ClerkProvider>
-      <html lang="en" className={`${geist.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${geist.variable}`} suppressHydrationWarning>
+      <ClerkProvider>
         <body>
           <ThemeProvider
             attribute="class"
@@ -35,7 +35,7 @@ export default function RootLayout({
             <Toaster richColors />
           </ThemeProvider>
         </body>
-      </html>
-    </ClerkProvider>
+      </ClerkProvider>
+    </html>
   );
 }

@@ -1,7 +1,7 @@
 import React from "react";
 
 const AskQuestionCard = () => {
-  return <div></div>;
+  return <div>question</div>;
 };
 
 export default AskQuestionCard;

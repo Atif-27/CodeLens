@@ -34,12 +34,9 @@ export const aiSummariseCommit = async (diff: string) => {
     Do not include parts of the example in your summary.
     It is given only as an example of appropriate comments.`,
         `Please summarise the following diff file: \n\n${diff}`];
-
-
     const response = await ai.models.generateContent({
-        model: 'gemini-2.0-flash-001',
+        model: 'gemini-2.5-flash-lite',
         contents: PROMPT,
     });
-
     return response.text;
 };

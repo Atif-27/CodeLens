@@ -1,7 +1,7 @@
 import React from "react";
 
 const MeetingCard = () => {
-  return <div></div>;
+  return <div>Meeting</div>;
 };
 
 export default MeetingCard;
