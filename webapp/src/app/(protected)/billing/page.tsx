@@ -1,5 +1,13 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { createCheckoutSession } from "@/lib/stripe-session";
 import { api } from "@/trpc/react";
@@ -10,6 +18,7 @@ import React, { useState, useTransition } from "react";
 function BillingPage() {
   const { data: user } = api.project.getMyCredits.useQuery();
   const [creditsToBuy, setCreditsToBuy] = useState<number[]>([100]);
+  const { data: transactions } = api.project.getMyTransactions.useQuery();
   const creditsToBuyAmount = creditsToBuy[0] ?? 0;
   const price = (creditsToBuyAmount / 50).toFixed(2);
   const [isPending, startTransition] = useTransition();
@@ -54,7 +63,7 @@ function BillingPage() {
         onClick={() => {
           startTransition(async () => {
             const url = await createCheckoutSession(creditsToBuyAmount);
-            redirect(url);
+            redirect(url!);
           });
         }}
       >
@@ -62,6 +71,32 @@ function BillingPage() {
           ? "Processing..."
           : `Buy ${creditsToBuyAmount} credits for $${price}`}
       </Button>
+
+      {transactions && transactions.length > 0 && (
+        <div>
+          <h1 className="text-lg font-semibold sm:text-xl">
+            Previous Transactions
+          </h1>
+          <div className="flex flex-col space-y-6 pt-4">
+            {transactions.map((transaction) => (
+              <Card
+                className="w-full max-w-md border-gray-700 bg-gray-800"
+                key={transaction?.id}
+              >
+                <CardHeader>
+                  <CardTitle>Payment</CardTitle>
+                  <CardDescription className="text-2xl">
+                    {transaction?.credits} Credits purchased
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  Date: {new Date(transaction?.createdAt).toISOString()}
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -65,6 +65,17 @@ export const projectRouter = createTRPCRouter({
                 id: ctx.user.userId!
             },
         });
+    }),
+
+    getMyTransactions: protectedProcedure.query(async ({ ctx }) => {
+        return ctx.db.stripeTransactions.findMany({
+            where: {
+                userId: ctx.user.userId!
+            },
+            orderBy: {
+                createdAt: "desc"
+            }
+        });
     })
 
 });
