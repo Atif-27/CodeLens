@@ -5,10 +5,12 @@ import {
   CreditCard,
   LayoutDashboard,
   Plus,
+  Glasses,
   Presentation,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+
 import { Button } from "@/components/ui/button";
 import {
   Sidebar,
@@ -66,7 +68,11 @@ export function AppSidebar() {
             className="size-8"
           />
           {open && (
-            <h1 className="text-primary/80 text-xl font-bold">DevSync</h1>
+            <h1 className="text-primary/80 flex w-full flex-row items-center justify-start gap-4 text-xl font-bold">
+              {" "}
+              <Glasses className="dark: text-black dark:text-white"></Glasses>
+              CodeLens
+            </h1>
           )}
         </div>
       </SidebarHeader>

@@ -70,7 +70,7 @@ const Create = () => {
             Link your GitHub Repository
           </h1>
           <p className="text-muted-foreground text-sm">
-            Enter the URL of the GitHub repository you want to link to DevSync.
+            Enter the URL of the GitHub repository you want to link to CodeLens.
           </p>
         </div>
         <div className=""></div>
