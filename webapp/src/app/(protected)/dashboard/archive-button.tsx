@@ -19,7 +19,7 @@ import useRefetch from "@/hooks/use-refetch";
 export default function ArchiveButton() {
   const archiveProject = api.project.archiveProject.useMutation();
   const refetch = useRefetch();
-  const { projectId } = useProject();
+  const { projectId, setProjectId } = useProject();
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -38,6 +38,7 @@ export default function ArchiveButton() {
           <AlertDialogAction
             onClick={() => {
               archiveProject.mutate({ projectId: projectId });
+              setProjectId("");
               void refetch();
             }}
           >

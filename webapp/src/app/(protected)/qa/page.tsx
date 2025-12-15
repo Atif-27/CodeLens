@@ -43,15 +43,9 @@ const ChatMain: React.FC = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           query: userMessage.content,
-          repoId: /github\.com\/([^/]+\/[^/]+)/.exec(
-            selectedProject!.githubUrl,
-          )?.[1],
+          projectId: project?.id,
         }),
       });
-
-      if (!res.ok) {
-        throw new Error("Failed to fetch");
-      }
 
       interface QueryResponse {
         answer?: string;
@@ -68,6 +62,8 @@ const ChatMain: React.FC = () => {
 
       setMessages((prev) => [...prev, assistantMessage]);
     } catch (err) {
+      console.log(err);
+
       const errorMessage: ChatMessage = {
         id: crypto.randomUUID(),
         role: "assistant",
@@ -185,8 +181,7 @@ const ChatMain: React.FC = () => {
         <form onSubmit={handleSubmit} className="flex items-end gap-2 md:gap-3">
           <div className="flex-1">
             <div className="rounded-2xl border border-slate-700 bg-slate-900/70 px-3 py-2 md:px-4 md:py-2.5">
-              <textarea
-                rows={1}
+              <input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Ask something about your repo / documents…"
@@ -194,10 +189,8 @@ const ChatMain: React.FC = () => {
               />
             </div>
             <p className="mt-1 text-[10px] text-slate-500">
-              Press <span className="rounded bg-slate-800 px-1">Enter</span> to
-              send,{" "}
-              <span className="rounded bg-slate-800 px-1">Shift+Enter</span> for
-              new line.
+              <span className="rounded bg-slate-800 px-1">Enter</span> for new
+              line.
             </p>
           </div>
 

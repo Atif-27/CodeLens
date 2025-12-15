@@ -28,7 +28,7 @@ const Page = async () => {
       emailAddress: user.emailAddresses[0]?.emailAddress ?? "",
     },
   });
-  return redirect("/dashboard");
+  redirect("/dashboard");
 };
 
 export default Page;

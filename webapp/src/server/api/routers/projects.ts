@@ -1,7 +1,9 @@
 import z from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { pollCommits } from "@/lib/github";
-import ingestRepo from "@/lib/kafka";
+import KafkaIngestRepo from "@/lib/kafka";
+import RedisIngestRepo from "@/lib/redis";
+
 import axios from "axios";
 
 export const projectRouter = createTRPCRouter({
@@ -13,12 +15,12 @@ export const projectRouter = createTRPCRouter({
                     id: ctx.user.userId!
                 }
             });
-            const repo = /github\.com\/([^/]+\/[^/]+)/.exec(repoUrl)?.[1];
+            const repoName = /github\.com\/([^/]+\/[^/]+)/.exec(repoUrl)?.[1];
 
             const { data } = await axios.get<{ cost: number; }>("http://localhost:5000/cost", {
                 params: {
                     accessToken: gitHubToken,
-                    repoId: repo
+                    repoName: repoName
                 }
             });
 
@@ -38,7 +40,9 @@ export const projectRouter = createTRPCRouter({
 
 
             await pollCommits(project.id);
-            await ingestRepo(repo!, gitHubToken!);
+            const env = process.env.ENV === "DEVELOPMENT";
+            await (env ? KafkaIngestRepo(repoName!, gitHubToken!, project.id) : RedisIngestRepo(repoName!, gitHubToken!, project.id));
+
             await ctx.db.user.update({
                 where: {
                     id: ctx.user.userId!
