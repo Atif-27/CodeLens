@@ -12,21 +12,7 @@ def load_github_repo_fast(
     ),
 ) -> List[Document]:
     
-    g = Github(token)
-    repo = g.get_repo(repo_name)
-    paths = []
-
-    def collect_files(path=""):
-        contents = repo.get_contents(path, ref=branch)
-        for item in contents:
-            if item.type == "dir":
-                collect_files(item.path)
-            elif item.path.endswith(code_extensions):
-                paths.append(item)
-
-    print(f"🔍 Scanning repository: {repo_name} ({branch}) ...")
-    collect_files()
-    print(f"✅ Found {len(paths)} code files to load.")
+    paths= get_github_files(repo_name,token,branch,code_extensions)
 
     docs = []
     for file in paths:
@@ -47,5 +33,26 @@ def load_github_repo_fast(
     return docs
 
 
+def get_github_files(repo_name: str,
+    token: str,
+    branch: str = "main",
+    code_extensions: Tuple[str, ...] = (
+        ".py", ".js", ".ts", ".tsx", ".jsx", ".java",
+        ".cpp", ".c", ".go", ".rs", ".html", ".css"
+    )):
+    g = Github(token)
+    repo = g.get_repo(repo_name)
+    paths = []
 
+    def collect_files(path=""):
+        contents = repo.get_contents(path, ref=branch)
+        for item in contents:
+            if item.type == "dir":
+                collect_files(item.path)
+            elif item.path.endswith(code_extensions):
+                paths.append(item)
 
+    print(f"🔍 Scanning repository: {repo_name} ({branch}) ...")
+    collect_files()
+    print(f"✅ Found {len(paths)} code files to load.")
+    return paths
