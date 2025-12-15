@@ -1,9 +1,9 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware  
 from pydantic import BaseModel
-from rag.src.utils.chat import retriever
+from utils.chat import retriever
 from dotenv import load_dotenv
-from rag.src.utils.load_repo import get_github_files
+from utils.load_repo import get_github_files
 import os
 
 

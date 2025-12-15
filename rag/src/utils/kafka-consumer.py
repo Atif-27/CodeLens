@@ -1,5 +1,5 @@
 from kafka import KafkaConsumer
-from rag.src.utils.index import loadDocAndStore
+from index import loadDocAndStore
 import json
 
 consumer = KafkaConsumer(
