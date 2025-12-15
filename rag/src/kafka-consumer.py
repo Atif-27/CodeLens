@@ -1,5 +1,5 @@
 from kafka import KafkaConsumer
-from index import loadDocAndStore
+from rag.src.utils.index import loadDocAndStore
 import json
 
 consumer = KafkaConsumer(
@@ -20,9 +20,12 @@ for msg in consumer:
         if not job:
             print("⚠️ Skipping empty or invalid message")
             continue
-        job_id = job.get("job_id")
-        repo_url = job.get("url")
-        access_token= job.get("access_token")
-        loadDocAndStore(repo_url, access_token)
+        jobId = job.get("jobId")
+        repoName = job.get("repoName")
+        accessToken= job.get("accessToken")
+        projectId= job.get("projectId")
+        
+        print(f"🧩 Processing job {jobId} for {projectId}") 
+        loadDocAndStore(repoName, accessToken,projectId)
     except Exception as e:
         print(f"❌ Error processing message: {e}")
