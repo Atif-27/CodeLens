@@ -1,7 +1,7 @@
 from upstash_redis import Redis
 import json
 import time
-from utils.load_repo import loadDocAndStore
+from utils.index import loadDocAndStore
 
 
 redis = Redis.from_env()
