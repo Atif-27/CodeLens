@@ -2,6 +2,7 @@
 
 import useProject from "@/hooks/use-project";
 import React, { useState, useRef, useEffect, type FormEvent } from "react";
+import ProjectFallback from "../project-fallback";
 
 type Role = "user" | "assistant";
 
@@ -15,7 +16,7 @@ const ChatMain: React.FC = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { setProjectId, project } = useProject();
+  const { setProjectId, project, projectId } = useProject();
   const selectedProject = project;
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
@@ -37,7 +38,7 @@ const ChatMain: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const res = await fetch("http://localhost:8000/query", {
+      const res = await fetch("http://localhost:5000/query", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -52,7 +53,11 @@ const ChatMain: React.FC = () => {
         throw new Error("Failed to fetch");
       }
 
-      const data = await res.json();
+      interface QueryResponse {
+        answer?: string;
+        [key: string]: unknown;
+      }
+      const data = (await res.json()) as unknown as QueryResponse;
       console.log(data);
 
       const assistantMessage: ChatMessage = {
@@ -74,7 +79,8 @@ const ChatMain: React.FC = () => {
       setIsLoading(false);
     }
   };
-  if (selectedProject == null) return <div>No Project Selected</div>;
+  if (!projectId) return <ProjectFallback></ProjectFallback>;
+
   return (
     <div className="flex h-full flex-col bg-slate-950/40 text-slate-100">
       {/* Main chat area */}

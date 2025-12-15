@@ -2,7 +2,6 @@
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
@@ -34,7 +33,7 @@ function BillingPage() {
       </div>
       <div className="mt-2 rounded-md border border-rose-200 bg-rose-50 px-3 py-2 text-rose-600 sm:px-4">
         <div className="flex items-start gap-2">
-          <Info className="mt-0.5 size-4 flex-shrink-0" />
+          <Info className="mt-0.5 size-4 shrink-0" />
           <div className="min-w-0">
             <p className="text-xs sm:text-sm">
               Each credit allows you to index 1 file in a repository.

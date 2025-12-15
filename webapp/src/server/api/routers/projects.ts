@@ -2,27 +2,61 @@ import z from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { pollCommits } from "@/lib/github";
 import ingestRepo from "@/lib/kafka";
+import axios from "axios";
 
 export const projectRouter = createTRPCRouter({
     createProject: protectedProcedure.input(z.object({ name: z.string(), repoUrl: z.string(), gitHubToken: z.string().optional(), })).mutation(async ({ ctx, input }) => {
-        const { name, repoUrl, gitHubToken = process.env.GITHUB_ACCESS_TOKEN } = input;
-        console.log(input);
-        const project = await ctx.db.project.create({
-            data: {
-                name,
-                githubUrl: repoUrl,
-                userToProject: {
-                    create: {
-                        userId: ctx.user.userId!,
+        try {
+            const { name, repoUrl, gitHubToken = process.env.GITHUB_ACCESS_TOKEN } = input;
+            const user = await ctx.db.user.findUnique({
+                where: {
+                    id: ctx.user.userId!
+                }
+            });
+            const repo = /github\.com\/([^/]+\/[^/]+)/.exec(repoUrl)?.[1];
+
+            const { data } = await axios.get<{ cost: number; }>("http://localhost:5000/cost", {
+                params: {
+                    accessToken: gitHubToken,
+                    repoId: repo
+                }
+            });
+
+            const cost = Number(data.cost) || 0;
+            if (user && user?.credit < cost) throw new Error("You dont have enought credit to create Project");
+            const project = await ctx.db.project.create({
+                data: {
+                    name,
+                    githubUrl: repoUrl,
+                    userToProject: {
+                        create: {
+                            userId: ctx.user.userId!,
+                        }
+                    }
+                },
+            });
+
+
+            await pollCommits(project.id);
+            await ingestRepo(repo!, gitHubToken!);
+            await ctx.db.user.update({
+                where: {
+                    id: ctx.user.userId!
+                },
+                data: {
+                    credit: {
+                        decrement: cost
                     }
                 }
-            },
-        });
-        const repo = /github\.com\/([^/]+\/[^/]+)/.exec(repoUrl)?.[1];
+            });
+            return { ...project, cost };
+        } catch (error) {
+            if (error instanceof Error) {
+                console.log(error.message);
 
-        await pollCommits(project.id);
-        await ingestRepo(repo!, gitHubToken!);
-        return project;
+                throw new Error(error.message || "Failed Creating Project");
+            }
+        }
     }),
 
 
@@ -36,6 +70,17 @@ export const projectRouter = createTRPCRouter({
                 }
                 , deletedAt: null
             },
+        });
+    }),
+
+    archiveProject: protectedProcedure.input(z.object({ projectId: z.string() })).mutation(async ({ ctx, input }) => {
+        return await ctx.db.project.update({
+            where: {
+                id: input.projectId
+            },
+            data: {
+                deletedAt: new Date()
+            }
         });
     }),
 
@@ -77,5 +122,7 @@ export const projectRouter = createTRPCRouter({
             }
         });
     })
+
+
 
 });

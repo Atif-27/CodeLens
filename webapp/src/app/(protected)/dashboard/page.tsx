@@ -3,15 +3,17 @@ import useProject from "@/hooks/use-project";
 import { ExternalLink, Github } from "lucide-react";
 import Link from "next/link";
 import React from "react";
-import DeleteButton from "./delete-button";
 import InviteButton from "./invite-button";
 import TeamMembers from "./team-members";
 import MeetingCard from "./meeting-card";
 import AskQuestionCard from "./ask-question-card";
 import CommitLog from "./commit-log";
+import ArchiveButton from "./archive-button";
+import ProjectFallback from "../project-fallback";
 
 const Page = () => {
-  const { project } = useProject();
+  const { project, projectId } = useProject();
+  if (!project) return <ProjectFallback />;
   return (
     <div>
       {/* <h1 className='text-2xl font-bold'>{project?.name}</h1>
@@ -43,7 +45,7 @@ const Page = () => {
         <div className="flex items-center gap-4">
           <TeamMembers />
           <InviteButton />
-          <DeleteButton />
+          <ArchiveButton />
         </div>
       </div>
 

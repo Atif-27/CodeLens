@@ -5,6 +5,7 @@ import React from "react";
 import useProject from "@/hooks/use-project";
 import { cn } from "@/lib/utils";
 import { api } from "@/trpc/react";
+import Image from "next/image";
 
 const CommitLog = () => {
   const { projectId, project } = useProject();
@@ -57,7 +58,9 @@ const CommitLog = () => {
               </div>
 
               <>
-                <img
+                <Image
+                  height={100}
+                  width={100}
                   src={commit.commitAuthorAvatar}
                   alt={"commit Avatar"}
                   className="relative mt-4 size-8 flex-none rounded-full bg-gray-50"

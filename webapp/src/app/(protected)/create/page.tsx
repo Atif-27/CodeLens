@@ -27,14 +27,17 @@ const Create = () => {
     createProject.mutate(
       { name: projectName, repoUrl: repoUrl, gitHubToken: gitHubToken },
       {
-        onSuccess: () => {
-          toast.success("Project created successfully");
+        onSuccess: (data) => {
+          toast.success(
+            `Project created successfully with ${data?.cost} Credits`,
+          );
           void refetch();
           reset();
         },
         onError: (error) => {
           console.log(error);
-          toast.error("Failed to create project");
+          const err = error.message || "Failed to create project: ";
+          toast.error(err);
         },
       },
     );
