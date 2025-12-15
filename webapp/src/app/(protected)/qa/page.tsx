@@ -38,7 +38,7 @@ const ChatMain: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const res = await fetch(process.env.API_SERVER + "/query", {
+      const res = await fetch(process.env.NEXT_PUBLIC_API_SERVER + "/query", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
