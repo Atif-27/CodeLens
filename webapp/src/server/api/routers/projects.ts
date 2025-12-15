@@ -17,7 +17,7 @@ export const projectRouter = createTRPCRouter({
             });
             const repoName = /github\.com\/([^/]+\/[^/]+)/.exec(repoUrl)?.[1];
 
-            const { data } = await axios.get<{ cost: number; }>(process.env.NEXT_PUBLIC_APP_URL + "/cost", {
+            const { data } = await axios.get<{ cost: number; }>(process.env.NEXT_PUBLIC_API_SERVER + "/cost", {
                 params: {
                     accessToken: gitHubToken,
                     repoName: repoName
