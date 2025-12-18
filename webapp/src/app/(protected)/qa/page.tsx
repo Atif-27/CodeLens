@@ -107,7 +107,7 @@ const ChatMainContent: React.FC = () => {
               <button
                 type="button"
                 onClick={() =>
-                  setInput("Summarise this repository and its main modules.")
+                  setInput("Summarise this repository and its modules.")
                 }
                 className="rounded-xl border border-border bg-card px-3 py-2 text-left hover:bg-accent transition-colors"
               >
