@@ -1,7 +1,7 @@
 "use client";
 
 import useProject from "@/hooks/use-project";
-import React, { useState, useRef, useEffect, type FormEvent } from "react";
+import React, { useState, useRef, useEffect, type FormEvent, Suspense } from "react";
 import ProjectFallback from "../project-fallback";
 import { useSearchParams } from "next/navigation";
 
@@ -13,7 +13,7 @@ interface ChatMessage {
   content: string;
 }
 
-const ChatMain: React.FC = () => {
+const ChatMainContent: React.FC = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -211,6 +211,18 @@ const ChatMain: React.FC = () => {
         </form>
       </div>
     </div>
+  );
+};
+
+const ChatMain: React.FC = () => {
+  return (
+    <Suspense fallback={
+      <div className="flex h-full items-center justify-center bg-background">
+        <div className="text-muted-foreground">Loading...</div>
+      </div>
+    }>
+      <ChatMainContent />
+    </Suspense>
   );
 };
 
