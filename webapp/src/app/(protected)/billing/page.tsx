@@ -8,6 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
+import { Spinner } from "@/components/ui/spinner";
 import { createCheckoutSession } from "@/lib/stripe-session";
 import { api } from "@/trpc/react";
 import { Info } from "lucide-react";
@@ -15,13 +16,16 @@ import { redirect } from "next/navigation";
 import React, { useState, useTransition } from "react";
 
 function BillingPage() {
-  const { data: user } = api.project.getMyCredits.useQuery();
+  const { data: user, isLoading: isLoadingUser } = api.project.getMyCredits.useQuery();
   const [creditsToBuy, setCreditsToBuy] = useState<number[]>([100]);
   const { data: transactions } = api.project.getMyTransactions.useQuery();
   const creditsToBuyAmount = creditsToBuy[0] ?? 0;
   const price = (creditsToBuyAmount / 50).toFixed(2);
   const [isPending, startTransition] = useTransition();
-
+  if(isLoadingUser) return <div
+  className="flex h-full flex-col items-center justify-center gap-10 md:flex-row">
+  <Spinner className="size-10 animate-spin" />
+  </div>
   return (
     <div className="space-y-4 sm:space-y-6">
       <div>

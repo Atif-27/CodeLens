@@ -3,6 +3,7 @@
 import useProject from "@/hooks/use-project";
 import React, { useState, useRef, useEffect, type FormEvent } from "react";
 import ProjectFallback from "../project-fallback";
+import { useSearchParams } from "next/navigation";
 
 type Role = "user" | "assistant";
 
@@ -19,6 +20,16 @@ const ChatMain: React.FC = () => {
   const { setProjectId, project, projectId } = useProject();
   const selectedProject = project;
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const searchParams = useSearchParams();
+
+  // Handle incoming question from URL parameter
+  useEffect(() => {
+    const questionParam = searchParams.get("q");
+    if (questionParam) {
+      setInput(questionParam);
+    }
+  }, [searchParams]);
+
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isLoading]);
@@ -178,8 +189,8 @@ const ChatMain: React.FC = () => {
 
       {/* Input area */}
       <div className="border-t border-slate-800 bg-slate-950/80 px-4 py-3 backdrop-blur md:px-6">
-        <form onSubmit={handleSubmit} className="flex items-end gap-2 md:gap-3">
-          <div className="flex-1">
+        <form onSubmit={handleSubmit} className="flex items-center justify-center gap-2 md:gap-3">
+          <div className="flex-1 items-center justify-center">
             <div className="rounded-2xl border border-slate-700 bg-slate-900/70 px-3 py-2 md:px-4 md:py-2.5">
               <input
                 value={input}
@@ -188,10 +199,6 @@ const ChatMain: React.FC = () => {
                 className="max-h-32 w-full resize-none bg-transparent text-sm text-slate-100 outline-none placeholder:text-slate-500"
               />
             </div>
-            <p className="mt-1 text-[10px] text-slate-500">
-              <span className="rounded bg-slate-800 px-1">Enter</span> for new
-              line.
-            </p>
           </div>
 
           <button

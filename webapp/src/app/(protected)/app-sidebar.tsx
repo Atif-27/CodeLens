@@ -27,12 +27,13 @@ import {
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import useProject from "@/hooks/use-project";
+import { Spinner } from "@/components/ui/spinner";
 
 export function AppSidebar() {
   const router = useRouter();
   const pathname = usePathname();
   const { open } = useSidebar();
-  const { projects, projectId, setProjectId } = useProject();
+  const { projects, projectId, setProjectId, isLoading } = useProject();
   const items = [
     {
       title: "Dashboard",
@@ -101,37 +102,46 @@ export function AppSidebar() {
           <SidebarGroupLabel>Your Projects</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {projects?.map((project) => {
-                return (
-                  <SidebarMenuItem key={project.id}>
-                    <SidebarMenuButton asChild>
-                      <div
-                        onClick={() => {
-                          setProjectId(project.id);
-                          // if (pathname !== "/dashboard" && pathname !== "/qa") {
-                          //   router.push("/dashboard");
-                          // }
-                        }}
-                        className={cn("cursor-pointer", {
-                          "bg-primary/20": project.id === projectId,
-                        })}
-                      >
+              <div>
+                {isLoading && (
+                  <div>
+                    <Spinner></Spinner>
+                  </div>
+                )}
+              </div>
+              {!isLoading &&
+                projects?.map((project) => {
+                  return (
+                    <SidebarMenuItem key={project.id}>
+                      <SidebarMenuButton asChild>
                         <div
-                          className={cn(
-                            "text-primary -ml-1 flex size-6 items-center justify-center rounded-sm border bg-white text-sm",
-                            {
-                              "bg-primary text-white": project.id === projectId,
-                            },
-                          )}
+                          onClick={() => {
+                            setProjectId(project.id);
+                            // if (pathname !== "/dashboard" && pathname !== "/qa") {
+                            //   router.push("/dashboard");
+                            // }
+                          }}
+                          className={cn("cursor-pointer", {
+                            "bg-primary/20": project.id === projectId,
+                          })}
                         >
-                          <span className="p-3">{project.name[0]}</span>
+                          <div
+                            className={cn(
+                              "text-primary -ml-1 flex size-6 items-center justify-center rounded-sm border bg-white text-sm",
+                              {
+                                "bg-primary text-white":
+                                  project.id === projectId,
+                              },
+                            )}
+                          >
+                            <span className="p-3">{project.name[0]}</span>
+                          </div>
+                          <span>{project.name}</span>
                         </div>
-                        <span>{project.name}</span>
-                      </div>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                );
-              })}
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
               <div className="h-2"></div>
               {open && (
                 <SidebarMenuItem>

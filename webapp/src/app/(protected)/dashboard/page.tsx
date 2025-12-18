@@ -5,7 +5,6 @@ import Link from "next/link";
 import React from "react";
 import InviteButton from "./invite-button";
 import TeamMembers from "./team-members";
-import MeetingCard from "./meeting-card";
 import AskQuestionCard from "./ask-question-card";
 import CommitLog from "./commit-log";
 import ArchiveButton from "./archive-button";
@@ -50,9 +49,8 @@ const Page = () => {
       </div>
 
       <div className="mt-4">
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <AskQuestionCard />
-          <MeetingCard />
         </div>
       </div>
 
