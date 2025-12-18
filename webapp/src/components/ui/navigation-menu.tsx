@@ -55,7 +55,7 @@ function NavigationMenuItem({
       className={cn("relative", className)}
       {...props}
     />
-  )
+  ) 
 }
 
 const navigationMenuTriggerStyle = cva(

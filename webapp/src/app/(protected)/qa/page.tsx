@@ -89,27 +89,27 @@ const ChatMain: React.FC = () => {
   if (!projectId) return <ProjectFallback></ProjectFallback>;
 
   return (
-    <div className="flex h-full flex-col bg-slate-950/40 text-slate-100">
+    <div className="flex h-full flex-col bg-background text-foreground">
       {/* Main chat area */}
       <div className="flex-1 overflow-y-auto px-4 py-4 md:px-6 md:py-6">
         {messages.length === 0 && !isLoading && (
-          <div className="flex h-full flex-col items-center justify-center gap-3 text-center text-sm text-slate-400">
-            <div className="rounded-2xl border border-dashed border-slate-700 bg-slate-900/60 px-4 py-3">
-              <p className="text-xs tracking-wide text-slate-500 uppercase">
+          <div className="flex h-full flex-col items-center justify-center gap-3 text-center text-sm text-muted-foreground">
+            <div className="rounded-2xl border border-dashed border-border bg-card px-4 py-3">
+              <p className="text-xs tracking-wide text-muted-foreground uppercase">
                 RAG Chatbot
               </p>
-              <p className="mt-1 text-sm text-slate-200">
+              <p className="mt-1 text-sm text-foreground">
                 Ask me anything about your indexed docs / repo.
               </p>
             </div>
 
-            <div className="mt-4 grid w-full max-w-xl gap-2 text-left text-xs text-slate-400 sm:grid-cols-2">
+            <div className="mt-4 grid w-full max-w-xl gap-2 text-left text-xs text-muted-foreground sm:grid-cols-2">
               <button
                 type="button"
                 onClick={() =>
                   setInput("Summarise this repository and its main modules.")
                 }
-                className="rounded-xl border border-slate-800 bg-slate-900/60 px-3 py-2 text-left hover:border-slate-600 hover:bg-slate-900"
+                className="rounded-xl border border-border bg-card px-3 py-2 text-left hover:bg-accent transition-colors"
               >
                 🔍 Overview of the codebase
               </button>
@@ -120,7 +120,7 @@ const ChatMain: React.FC = () => {
                     "Where is the database connection configured in this project?",
                   )
                 }
-                className="rounded-xl border border-slate-800 bg-slate-900/60 px-3 py-2 text-left hover:border-slate-600 hover:bg-slate-900"
+                className="rounded-xl border border-border bg-card px-3 py-2 text-left hover:bg-accent transition-colors"
               >
                 🗂 Find specific logic
               </button>
@@ -131,7 +131,7 @@ const ChatMain: React.FC = () => {
                     "Explain how authentication works in this repository.",
                   )
                 }
-                className="rounded-xl border border-slate-800 bg-slate-900/60 px-3 py-2 text-left hover:border-slate-600 hover:bg-slate-900"
+                className="rounded-xl border border-border bg-card px-3 py-2 text-left hover:bg-accent transition-colors"
               >
                 🔐 Explain a feature
               </button>
@@ -142,7 +142,7 @@ const ChatMain: React.FC = () => {
                     "Suggest refactors or improvements for this project’s architecture.",
                   )
                 }
-                className="rounded-xl border border-slate-800 bg-slate-900/60 px-3 py-2 text-left hover:border-slate-600 hover:bg-slate-900"
+                className="rounded-xl border border-border bg-card px-3 py-2 text-left hover:bg-accent transition-colors"
               >
                 🛠 Refactor / improvements
               </button>
@@ -161,8 +161,8 @@ const ChatMain: React.FC = () => {
               <div
                 className={`max-w-[80%] rounded-2xl px-3 py-2 text-sm md:max-w-[70%] md:px-4 md:py-3 ${
                   msg.role === "user"
-                    ? "rounded-br-sm bg-blue-600 text-white"
-                    : "rounded-bl-sm border border-slate-800 bg-slate-900/80 text-slate-100"
+                    ? "rounded-br-sm bg-primary text-primary-foreground"
+                    : "rounded-bl-sm border border-border bg-card text-foreground"
                 }`}
               >
                 {msg.content}
@@ -172,11 +172,11 @@ const ChatMain: React.FC = () => {
 
           {isLoading && (
             <div className="flex justify-start">
-              <div className="flex items-center gap-2 rounded-2xl rounded-bl-sm border border-slate-800 bg-slate-900/80 px-3 py-2 text-sm md:px-4 md:py-3">
-                <span className="h-2 w-2 animate-bounce rounded-full bg-slate-400" />
-                <span className="h-2 w-2 animate-bounce rounded-full bg-slate-500 delay-150" />
-                <span className="h-2 w-2 animate-bounce rounded-full bg-slate-600 delay-300" />
-                <span className="ml-2 text-xs text-slate-400">
+              <div className="flex items-center gap-2 rounded-2xl rounded-bl-sm border border-border bg-card px-3 py-2 text-sm md:px-4 md:py-3">
+                <span className="h-2 w-2 animate-bounce rounded-full bg-muted-foreground" />
+                <span className="h-2 w-2 animate-bounce rounded-full bg-muted-foreground/70 delay-150" />
+                <span className="h-2 w-2 animate-bounce rounded-full bg-muted-foreground/50 delay-300" />
+                <span className="ml-2 text-xs text-muted-foreground">
                   Thinking with your docs…
                 </span>
               </div>
@@ -188,15 +188,15 @@ const ChatMain: React.FC = () => {
       </div>
 
       {/* Input area */}
-      <div className="border-t border-slate-800 bg-slate-950/80 px-4 py-3 backdrop-blur md:px-6">
+      <div className="border-t border-border bg-background/80 px-4 py-3 backdrop-blur md:px-6">
         <form onSubmit={handleSubmit} className="flex items-center justify-center gap-2 md:gap-3">
           <div className="flex-1 items-center justify-center">
-            <div className="rounded-2xl border border-slate-700 bg-slate-900/70 px-3 py-2 md:px-4 md:py-2.5">
+            <div className="rounded-2xl border border-input bg-card px-3 py-2 md:px-4 md:py-2.5">
               <input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Ask something about your repo / documents…"
-                className="max-h-32 w-full resize-none bg-transparent text-sm text-slate-100 outline-none placeholder:text-slate-500"
+                className="max-h-32 w-full resize-none bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
               />
             </div>
           </div>
@@ -204,7 +204,7 @@ const ChatMain: React.FC = () => {
           <button
             type="submit"
             disabled={!input.trim() || isLoading}
-            className="inline-flex h-9 items-center justify-center rounded-2xl border border-blue-500 bg-blue-600 px-3 text-xs font-medium text-white shadow-sm transition hover:bg-blue-500 disabled:cursor-not-allowed disabled:border-slate-700 disabled:bg-slate-800"
+            className="inline-flex h-9 items-center justify-center rounded-2xl bg-primary text-primary-foreground px-3 text-xs font-medium shadow-sm transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isLoading ? "Sending..." : "Send"}
           </button>

@@ -2,6 +2,7 @@ import { UserButton } from "@clerk/nextjs";
 import React from "react";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "./app-sidebar";
+import { ModeToggle } from "@/components/ToggleTheme";
 // import { AppSidebar } from "./app-sidebar";
 // import { ModeToggle } from "../components/ThemeToggle";
 
@@ -24,7 +25,7 @@ const SideBarLayout = ({ children }: Props) => {
           <SidebarTrigger />
           {/* <SearchBar/> */}
           <div className="ml-auto"></div>
-          {/* <ModeToggle /> */}
+          <ModeToggle/>
           <UserButton appearance={userButtonAppearance} />
         </div>
         <div className="h-4"></div>

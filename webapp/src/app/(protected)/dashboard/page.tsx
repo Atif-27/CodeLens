@@ -9,14 +9,16 @@ import AskQuestionCard from "./ask-question-card";
 import CommitLog from "./commit-log";
 import ArchiveButton from "./archive-button";
 import ProjectFallback from "../project-fallback";
+import { Spinner } from "@/components/ui/spinner";
 
 const Page = () => {
-  const { project, projectId } = useProject();
+  const { project, projectId,isLoading } = useProject();
+  if (isLoading) return <div className="flex h-full flex-col items-center justify-center gap-10 md:flex-row"><Spinner className="size-10 animate-spin" /></div>;
   if (!project) return <ProjectFallback />;
   return (
     <div>
-      {/* <h1 className='text-2xl font-bold'>{project?.name}</h1>
-      <div className='h-2'></div> */}
+      <h1 className='text-2xl font-bold'>{project?.name}</h1>
+      <div className='h-2'></div>
 
       <div className="flex flex-wrap items-center justify-between gap-y-4">
         {/* Github Link */}
