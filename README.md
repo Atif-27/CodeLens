@@ -1,8 +1,8 @@
-# DevSync - Project Documentation
+# CodeLens - Project Documentation
 
 ## 📋 Project Overview
 
-**DevSync** is an AI-powered GitHub repository analysis and Q&A platform that enables developers to interact with their codebase using natural language. The system ingests GitHub repositories, processes them using RAG (Retrieval-Augmented Generation) architecture, and provides intelligent responses to code-related queries.
+**CodeLens** is an AI-powered GitHub repository analysis and Q&A platform that enables developers to interact with their codebase using natural language. The system ingests GitHub repositories, processes them using RAG (Retrieval-Augmented Generation) architecture, and provides intelligent responses to code-related queries.
 
 ### Key Features
 - 🔍 GitHub repository integration and analysis
